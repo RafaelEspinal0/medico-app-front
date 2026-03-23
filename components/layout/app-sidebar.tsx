@@ -36,11 +36,6 @@ const menuItems = [
     icon: Users,
   },
   {
-    title: "Horarios",
-    href: "/horarios",
-    icon: CalendarRange,
-  },
-  {
     title: "Sustituciones",
     href: "/sustituciones",
     icon: RefreshCcw,
