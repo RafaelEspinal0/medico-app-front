@@ -14,6 +14,7 @@ export interface RegistrarVacacionDto {
 }
 
 export interface UpdateVacacionDto {
+  id: string;
   fechaInicio: string;
   fechaFin: string;
   tipoVacacion: number;
