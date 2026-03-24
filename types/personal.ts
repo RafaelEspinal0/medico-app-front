@@ -25,6 +25,7 @@ export interface CreatePersonalDto {
 }
 
 export interface UpdatePersonalDto {
+  id: string;
   nombre: string;
   direccion: string;
   telefono: string;

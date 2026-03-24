@@ -134,17 +134,7 @@ export function PersonalFormDialog({
     return Object.keys(nextErrors).length === 0;
   };
 
-  const buildPayload = (): CreatePersonalDto | UpdatePersonalDto => ({
-    nombre: values.nombre.trim(),
-    direccion: values.direccion.trim(),
-    telefono: values.telefono.trim(),
-    poblacion: values.poblacion.trim(),
-    provincia: values.provincia.trim(),
-    codigoPostal: values.codigoPostal.trim(),
-    nif: values.nif.trim(),
-    numSeguridadSocial: values.numSeguridadSocial.trim(),
-    tipoPersonal: Number(values.tipoPersonal),
-  });
+
 
   const handleSubmit = async () => {
     if (!validate()) {
@@ -152,16 +142,34 @@ export function PersonalFormDialog({
       return;
     }
 
-    const payload = buildPayload();
+    const basePayload = {
+      nombre: values.nombre.trim(),
+      direccion: values.direccion.trim(),
+      telefono: values.telefono.trim(),
+      poblacion: values.poblacion.trim(),
+      provincia: values.provincia.trim(),
+      codigoPostal: values.codigoPostal.trim(),
+      nif: values.nif.trim(),
+      numSeguridadSocial: values.numSeguridadSocial.trim(),
+      tipoPersonal: Number(values.tipoPersonal),
+    };
 
     try {
       if (isEditMode && personal?.id) {
+        const payload: UpdatePersonalDto = {
+          id: personal.id,
+          ...basePayload,
+        };
+
         await updateMutation.mutateAsync({
           id: personal.id,
           payload,
         });
+
         toast.success("Empleado actualizado correctamente.");
       } else {
+        const payload: CreatePersonalDto = basePayload;
+
         await createMutation.mutateAsync(payload);
         toast.success("Empleado creado correctamente.");
       }

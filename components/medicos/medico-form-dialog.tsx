@@ -126,29 +126,31 @@ export function MedicoFormDialog({
     return Object.keys(nextErrors).length === 0;
   };
 
-  const buildPayload = (): CreateMedicoDto | UpdateMedicoDto => ({
-    nombre: values.nombre.trim(),
-    direccion: values.direccion.trim(),
-    telefono: values.telefono.trim(),
-    poblacion: values.poblacion.trim(),
-    provincia: values.provincia.trim(),
-    codigoPostal: values.codigoPostal.trim(),
-    nif: values.nif.trim(),
-    numSeguridadSocial: values.numSeguridadSocial.trim(),
-    numColegiado: values.numColegiado.trim(),
-    tipoMedico: Number(values.tipoMedico),
-  });
-
   const handleSubmit = async () => {
     if (!validate()) {
       toast.error("Revisa los campos obligatorios.");
       return;
     }
 
-    const payload = buildPayload();
+    const basePayload = {
+      nombre: values.nombre.trim(),
+      direccion: values.direccion.trim(),
+      telefono: values.telefono.trim(),
+      poblacion: values.poblacion.trim(),
+      provincia: values.provincia.trim(),
+      codigoPostal: values.codigoPostal.trim(),
+      nif: values.nif.trim(),
+      numSeguridadSocial: values.numSeguridadSocial.trim(),
+      numColegiado: values.numColegiado.trim(),
+      tipoMedico: Number(values.tipoMedico),
+    };
 
     try {
       if (isEditMode && medico?.id) {
+        const payload: UpdateMedicoDto = {
+          id: medico.id,
+          ...basePayload,
+        };
         await updateMutation.mutateAsync({
           id: medico.id,
           payload,
@@ -156,6 +158,8 @@ export function MedicoFormDialog({
 
         toast.success("Médico actualizado correctamente.");
       } else {
+        const payload: CreateMedicoDto = basePayload;
+        
         await createMutation.mutateAsync(payload);
         toast.success("Médico creado correctamente.");
       }

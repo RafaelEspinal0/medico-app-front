@@ -93,8 +93,8 @@ export function SustitucionFormDialog({
   };
 
   const buildPayload = (): RegistrarSustitucionDto => ({
-    fechaAltaSustitucion: values.fechaAltaSustitucion,
-    fechaBajaSustitucion: values.fechaBajaSustitucion || null,
+    fechaAlta: values.fechaAltaSustitucion,
+    fechaBaja: values.fechaBajaSustitucion || null,
   });
 
   const handleSubmit = async () => {

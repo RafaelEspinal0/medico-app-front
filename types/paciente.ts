@@ -22,6 +22,7 @@ export interface CreatePacienteDto {
 }
 
 export interface UpdatePacienteDto {
+  id: string;
   nombre: string;
   direccion: string;
   telefono: string;

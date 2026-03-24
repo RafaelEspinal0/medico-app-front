@@ -126,15 +126,6 @@ export function PacienteFormDialog({
     return Object.keys(nextErrors).length === 0;
   };
 
-  const buildPayload = (): CreatePacienteDto | UpdatePacienteDto => ({
-    nombre: values.nombre.trim(),
-    direccion: values.direccion.trim(),
-    telefono: values.telefono.trim(),
-    codigoPostal: values.codigoPostal.trim(),
-    nif: values.nif.trim(),
-    numSeguridadSocial: values.numSeguridadSocial.trim(),
-    medicoId: values.medicoId,
-  });
 
   const handleSubmit = async () => {
     if (!validate()) {
@@ -142,16 +133,30 @@ export function PacienteFormDialog({
       return;
     }
 
-    const payload = buildPayload();
+    const basePayload = {
+      nombre: values.nombre.trim(),
+      direccion: values.direccion.trim(),
+      telefono: values.telefono.trim(),
+      codigoPostal: values.codigoPostal.trim(),
+      nif: values.nif.trim(),
+      numSeguridadSocial: values.numSeguridadSocial.trim(),
+      medicoId: values.medicoId,
+    }
 
     try {
       if (isEditMode && paciente?.id) {
+        const payload: UpdatePacienteDto = {
+          id: paciente.id,
+          ...basePayload,
+        }
+
         await updateMutation.mutateAsync({
           id: paciente.id,
           payload,
         });
         toast.success("Paciente actualizado correctamente.");
       } else {
+        const payload: CreatePacienteDto = basePayload;
         await createMutation.mutateAsync(payload);
         toast.success("Paciente creado correctamente.");
       }

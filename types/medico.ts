@@ -28,6 +28,7 @@ export interface CreateMedicoDto {
 }
 
 export interface UpdateMedicoDto {
+  id: string;
   nombre: string;
   direccion: string;
   telefono: string;

@@ -10,6 +10,6 @@ export interface Sustitucion {
 }
 
 export interface RegistrarSustitucionDto {
-  fechaAltaSustitucion: string;
-  fechaBajaSustitucion?: string | null;
+  fechaAlta: string;
+  fechaBaja?: string | null;
 }
