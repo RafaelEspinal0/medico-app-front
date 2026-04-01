@@ -20,16 +20,14 @@ export function useCreateSustitucion() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({
-      medicoId,
-      payload,
-    }: {
-      medicoId: string;
-      payload: RegistrarSustitucionDto;
-    }) => createSustitucion(medicoId, payload),
-    onSuccess: (_, variables) => {
+    mutationFn: (payload: RegistrarSustitucionDto) =>
+      createSustitucion(payload),
+    onSuccess: (_, payload) => {
       queryClient.invalidateQueries({
-        queryKey: ["sustituciones", "por-medico", variables.medicoId],
+        queryKey: ["sustituciones", "por-medico", payload.medicoSustitutoId],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["medicos", "sustitutos", "activos"],
       });
     },
   });

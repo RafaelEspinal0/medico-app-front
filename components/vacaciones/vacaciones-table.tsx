@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarRange, Eye, Search } from "lucide-react";
+import { CalendarCheck, CalendarRange, Eye, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Vacacion } from "@/types/vacacion";
 import { cn } from "@/lib/utils";
@@ -36,12 +36,14 @@ interface VacacionesTableProps {
   vacaciones: Vacacion[];
   onView?: (vacacion: Vacacion) => void;
   onEdit?: (vacacion: Vacacion) => void;
+  onMarcarDisfrutada?: (vacacion: Vacacion) => void;
 }
 
 export function VacacionesTable({
   vacaciones,
   onView,
   onEdit,
+  onMarcarDisfrutada,
 }: VacacionesTableProps) {
   return (
     <>
@@ -120,6 +122,18 @@ export function VacacionesTable({
                       >
                         Editar
                       </Button>
+
+                      {Number(vacacion.tipoVacacion) === 1 && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="rounded-xl"
+                          onClick={() => onMarcarDisfrutada?.(vacacion)}
+                        >
+                          <CalendarCheck className="mr-2 h-4 w-4" />
+                          Disfrutada
+                        </Button>
+                      )}
                     </div>
                   </td>
                 </tr>
@@ -196,6 +210,17 @@ export function VacacionesTable({
               >
                 Editar
               </Button>
+
+              {Number(vacacion.tipoVacacion) === 1 && (
+                <Button
+                  variant="outline"
+                  className="col-span-2 rounded-2xl"
+                  onClick={() => onMarcarDisfrutada?.(vacacion)}
+                >
+                  <CalendarCheck className="mr-2 h-4 w-4" />
+                  Marcar como disfrutada
+                </Button>
+              )}
             </div>
           </div>
         ))}

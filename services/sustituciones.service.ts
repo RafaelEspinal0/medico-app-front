@@ -12,13 +12,11 @@ export async function getSustitucionesByMedico(medicoId: string) {
   return data;
 }
 
-export async function createSustitucion(
-  medicoId: string,
-  payload: RegistrarSustitucionDto
-) {
+export async function createSustitucion(payload: RegistrarSustitucionDto) {
   const { data } = await api.post<ApiResponse<string>>(
-    `/api/Sustituciones/medico/${medicoId}`,
+    `/api/Sustituciones`,
     payload
   );
   return data;
 }
+

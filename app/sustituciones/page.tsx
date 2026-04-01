@@ -1,10 +1,10 @@
 "use client";
 
-import { useMedicos } from "@/hooks/use-medicos";
+import { useMedicosSustitutos } from "@/hooks/use-medicos";
 import { SustitucionesView } from "@/components/sustituciones/sustituciones-view";
 
 export default function SustitucionesPage() {
-  const { data, isLoading, isError } = useMedicos();
+  const { data, isLoading, isError } = useMedicosSustitutos();
 
   if (isLoading) {
     return (

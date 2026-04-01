@@ -20,7 +20,6 @@ interface SustitucionesViewProps {
 
 export function SustitucionesView({ medicos }: SustitucionesViewProps) {
   const [search, setSearch] = useState("");
-  const [selectedTipo, setSelectedTipo] = useState("todos");
   const [selectedEstado, setSelectedEstado] =
     useState<EstadoSustitucionFilter>("todos");
 
@@ -41,18 +40,14 @@ export function SustitucionesView({ medicos }: SustitucionesViewProps) {
         (medico.numColegiado || "").toLowerCase().includes(q) ||
         (medico.telefono || "").toLowerCase().includes(q);
 
-      const matchesTipo =
-        selectedTipo === "todos" ||
-        String(medico.tipoMedico ?? "") === selectedTipo;
-
       const matchesEstado =
         selectedEstado === "todos" ||
         (selectedEstado === "activos" && medico.isActive) ||
         (selectedEstado === "inactivos" && !medico.isActive);
 
-      return matchesSearch && matchesTipo && matchesEstado;
+      return matchesSearch && matchesEstado;
     });
-  }, [medicos, search, selectedTipo, selectedEstado]);
+  }, [medicos, search, selectedEstado]);
 
   const handleViewHistorial = (medico: Medico) => {
     setViewMedico(medico);
@@ -103,8 +98,6 @@ export function SustitucionesView({ medicos }: SustitucionesViewProps) {
         <SustitucionesFilters
           search={search}
           onSearchChange={setSearch}
-          selectedTipo={selectedTipo}
-          onTipoChange={setSelectedTipo}
           selectedEstado={selectedEstado}
           onEstadoChange={setSelectedEstado}
           resultsCount={filteredMedicos.length}

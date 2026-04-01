@@ -4,6 +4,8 @@ import {
   deleteMedico,
   getMedicoById,
   getMedicos,
+  getMedicosSustitutos,
+  getMedicosSustitutosActivos,
   updateMedico,
 } from "@/services/medicos.service";
 import { CreateMedicoDto, UpdateMedicoDto } from "@/types/medico";
@@ -54,5 +56,19 @@ export function useDeleteMedico() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["medicos"] });
     },
+  });
+}
+
+export function useMedicosSustitutos() {
+  return useQuery({
+    queryKey: ["medicos", "sustitutos"],
+    queryFn: getMedicosSustitutos,
+  });
+}
+
+export function useMedicosSustitutosActivos() {
+  return useQuery({
+    queryKey: ["medicos", "sustitutos", "activos"],
+    queryFn: getMedicosSustitutosActivos,
   });
 }

@@ -133,15 +133,15 @@ export function MedicoFormDialog({
     }
 
     const basePayload = {
-      nombre: values.nombre.trim(),
-      direccion: values.direccion.trim(),
-      telefono: values.telefono.trim(),
-      poblacion: values.poblacion.trim(),
-      provincia: values.provincia.trim(),
-      codigoPostal: values.codigoPostal.trim(),
-      nif: values.nif.trim(),
-      numSeguridadSocial: values.numSeguridadSocial.trim(),
-      numColegiado: values.numColegiado.trim(),
+      nombre: values.nombre.trim() || null,
+      direccion: values.direccion.trim() || null,
+      telefono: values.telefono.trim() || null,
+      poblacion: values.poblacion.trim() || null,
+      provincia: values.provincia.trim() || null,
+      codigoPostal: values.codigoPostal.trim() || null,
+      nif: values.nif.trim() || null,
+      numSeguridadSocial: values.numSeguridadSocial.trim() || null,
+      numColegiado: values.numColegiado.trim() || null,
       tipoMedico: Number(values.tipoMedico),
     };
 

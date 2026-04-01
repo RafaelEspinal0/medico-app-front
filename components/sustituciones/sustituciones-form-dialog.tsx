@@ -14,16 +14,19 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { useCreateSustitucion } from "@/hooks/use-sustituciones";
+import { useMedicos } from "@/hooks/use-medicos";
 import { getErrorMessage } from "@/lib/extract-api-error";
 import { Medico } from "@/types/medico";
 import { RegistrarSustitucionDto } from "@/types/sustitucion";
 
 type FormValues = {
+  medicoTitularId: string;
   fechaAltaSustitucion: string;
   fechaBajaSustitucion: string;
 };
 
 const initialValues: FormValues = {
+  medicoTitularId: "",
   fechaAltaSustitucion: "",
   fechaBajaSustitucion: "",
 };
@@ -40,6 +43,7 @@ export function SustitucionFormDialog({
   medico,
 }: SustitucionFormDialogProps) {
   const createMutation = useCreateSustitucion();
+  const { data: medicosData } = useMedicos();
   const isSubmitting = createMutation.isPending;
 
   const [values, setValues] = useState<FormValues>(initialValues);
@@ -71,8 +75,17 @@ export function SustitucionFormDialog({
     setErrors((prev) => ({ ...prev, [field]: undefined }));
   };
 
+  const medicosParaTitular = useMemo(
+    () => (medicosData?.data ?? []).filter((m) => m.id !== medico?.id && Number(m.tipoMedico) !== 3),
+    [medicosData, medico]
+  );
+
   const validate = () => {
     const nextErrors: Partial<Record<keyof FormValues, string>> = {};
+
+    if (!values.medicoTitularId) {
+      nextErrors.medicoTitularId = "El médico titular es obligatorio.";
+    }
 
     if (!values.fechaAltaSustitucion) {
       nextErrors.fechaAltaSustitucion =
@@ -93,6 +106,8 @@ export function SustitucionFormDialog({
   };
 
   const buildPayload = (): RegistrarSustitucionDto => ({
+    medicoSustitutoId: medico!.id,
+    medicoTitularId: values.medicoTitularId,
     fechaAlta: values.fechaAltaSustitucion,
     fechaBaja: values.fechaBajaSustitucion || null,
   });
@@ -109,10 +124,7 @@ export function SustitucionFormDialog({
     }
 
     try {
-      await createMutation.mutateAsync({
-        medicoId: medico.id,
-        payload: buildPayload(),
-      });
+      await createMutation.mutateAsync(buildPayload());
 
       toast.success("Sustitución registrada correctamente.");
       onOpenChange(false);
@@ -153,6 +165,29 @@ export function SustitucionFormDialog({
 
           <section className="rounded-3xl border bg-muted/20 p-5">
             <h3 className="text-sm font-semibold">Datos de sustitución</h3>
+
+            <div className="mt-4 space-y-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium">Médico titular *</label>
+                <select
+                  value={values.medicoTitularId}
+                  onChange={(e) => setField("medicoTitularId", e.target.value)}
+                  className="h-11 w-full rounded-2xl border bg-background px-4 text-sm outline-none transition focus:border-primary"
+                >
+                  <option value="">Selecciona un médico titular</option>
+                  {medicosParaTitular.map((m) => (
+                    <option key={m.id} value={m.id}>
+                      {m.nombre || m.id}
+                    </option>
+                  ))}
+                </select>
+                {errors.medicoTitularId ? (
+                  <p className="text-xs text-destructive">
+                    {errors.medicoTitularId}
+                  </p>
+                ) : null}
+              </div>
+            </div>
 
             <div className="mt-4 grid gap-4 md:grid-cols-2">
               <div className="space-y-2">

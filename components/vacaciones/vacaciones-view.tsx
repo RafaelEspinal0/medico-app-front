@@ -13,8 +13,10 @@ import { VacacionesTable } from "./vacaciones-table";
 import { VacacionFormDialog } from "./vacacion-form-dialog";
 import { ViewVacacionDialog } from "./view-vacacion-dialog";
 import { useVacationPeople } from "@/hooks/use-vacation-people";
-import { useVacacionesByEmpleado } from "@/hooks/use-vacaciones";
+import { useMarkVacacionAsDisfrutada, useVacacionesByEmpleado } from "@/hooks/use-vacaciones";
 import { Vacacion } from "@/types/vacacion";
+import { toast } from "sonner";
+import { getErrorMessage } from "@/lib/extract-api-error";
 
 export function VacacionesView() {
   const [selectedEmpleadoId, setSelectedEmpleadoId] = useState("");
@@ -41,6 +43,8 @@ export function VacacionesView() {
     isLoading: isVacacionesLoading,
     isError: isVacacionesError,
   } = useVacacionesByEmpleado(selectedEmpleadoId || undefined);
+
+  const marcarDisfrutadaMutation = useMarkVacacionAsDisfrutada();
 
   const selectedPerson = useMemo(
     () => people.find((person) => person.id === selectedEmpleadoId) ?? null,
@@ -80,6 +84,18 @@ export function VacacionesView() {
   const handleEdit = (vacacion: Vacacion) => {
     setSelectedVacacion(vacacion);
     setFormDialogOpen(true);
+  };
+
+  const handleMarcarDisfrutada = async (vacacion: Vacacion) => {
+    try {
+      await marcarDisfrutadaMutation.mutateAsync({
+        vacacionId: vacacion.id,
+        empleadoId: selectedEmpleadoId,
+      });
+      toast.success("Vacación marcada como disfrutada.");
+    } catch (error) {
+      toast.error(getErrorMessage(error, "No se pudo actualizar la vacación."));
+    }
   };
 
   if (isPeopleLoading) {
@@ -215,6 +231,7 @@ export function VacacionesView() {
               vacaciones={filteredVacaciones}
               onView={handleView}
               onEdit={handleEdit}
+              onMarcarDisfrutada={handleMarcarDisfrutada}
             />
           </section>
         </>

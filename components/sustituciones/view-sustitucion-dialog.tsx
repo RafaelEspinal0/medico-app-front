@@ -3,10 +3,9 @@
 import {
   CalendarClock,
   CalendarRange,
-  MapPin,
-  Phone,
   ShieldCheck,
-  TimerReset,
+  UserCheck,
+  UserRound,
 } from "lucide-react";
 
 import {
@@ -114,39 +113,29 @@ export function ViewSustitucionDialog({
                   >
                     <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
                       <InfoItem
-                        icon={ShieldCheck}
-                        label="Nombre"
-                        value={item.nombre}
+                        icon={UserRound}
+                        label="Médico sustituto"
+                        value={item.nombreMedico}
                       />
                       <InfoItem
-                        icon={Phone}
-                        label="Teléfono"
-                        value={item.telefono}
-                      />
-                      <InfoItem
-                        icon={MapPin}
-                        label="Provincia"
-                        value={item.provincia}
-                      />
-                      <InfoItem
-                        icon={ShieldCheck}
-                        label="Colegiado"
-                        value={item.numColegiado}
+                        icon={UserCheck}
+                        label="Médico titular"
+                        value={item.nombreMedicoTitular}
                       />
                       <InfoItem
                         icon={CalendarClock}
                         label="Fecha alta"
-                        value={formatDate(item.fechaAltaSustitucion)}
+                        value={formatDate(item.fechaAlta)}
                       />
                       <InfoItem
                         icon={CalendarRange}
                         label="Fecha baja"
-                        value={formatDate(item.fechaBajaSustitucion)}
+                        value={formatDate(item.fechaBaja)}
                       />
                       <InfoItem
-                        icon={TimerReset}
-                        label="Días en sustitución"
-                        value={item.diasEnSustitucion}
+                        icon={ShieldCheck}
+                        label="Estado"
+                        value={item.estaActiva ? "Activa" : "Inactiva"}
                       />
                     </div>
                   </div>

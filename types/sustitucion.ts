@@ -1,15 +1,17 @@
 export interface Sustitucion {
   id: string;
-  nombre: string | null;
-  numColegiado: string | null;
-  telefono: string | null;
-  provincia: string | null;
-  fechaAltaSustitucion: string;
-  fechaBajaSustitucion: string | null;
-  diasEnSustitucion: number;
+  medicoId: string;
+  nombreMedico: string | null;
+  medicoTitularId: string;
+  nombreMedicoTitular: string | null;
+  fechaAlta: string;
+  fechaBaja: string | null;
+  estaActiva: boolean;
 }
 
 export interface RegistrarSustitucionDto {
+  medicoSustitutoId: string;
+  medicoTitularId: string;
   fechaAlta: string;
   fechaBaja?: string | null;
 }
